@@ -1,7 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -23,13 +26,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { TabsContent } from "@/components/ui/tabs";
+import { authClient } from "@/lib/auth-client";
 
 const signInSchema = z.object({
   email: z.string().trim().email("Email inválido"),
-  password: z.string().trim().min(8, "Senha deve ter pelo menos 6 caracteres"),
+  password: z.string().trim().min(8, "Senha deve ter pelo menos 8 caracteres"),
 });
 
 export function SignInForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -38,8 +43,20 @@ export function SignInForm() {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof signInSchema>) => {
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     console.log(data);
+    await authClient.signIn.email(
+      {
+        email: data?.email,
+        password: data?.password,
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard");
+          toast.success("Login realizado com sucesso");
+        },
+      },
+    );
   };
 
   return (
@@ -75,14 +92,31 @@ export function SignInForm() {
                   <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
-                      <Input placeholder="Digite sua senha" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Digite sua senha"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <CardFooter className="flex justify-end p-0">
-                <Button type="submit">Fazer login</Button>
+                <Button
+                  disabled={form.formState.isSubmitting}
+                  className="flex items-center gap-2"
+                  type="submit"
+                >
+                  {form.formState.isSubmitting && (
+                    <LoaderCircle
+                      size={16}
+                      color="#fff"
+                      className="animate-spin"
+                    />
+                  )}
+                  Fazer login
+                </Button>
               </CardFooter>
             </form>
           </Form>
