@@ -55,6 +55,9 @@ export function SignInForm() {
           router.push("/dashboard");
           toast.success("Login realizado com sucesso");
         },
+        onError: () => {
+          toast.error("Senha ou email inválido");
+        },
       },
     );
   };
