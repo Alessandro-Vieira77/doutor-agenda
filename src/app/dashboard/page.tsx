@@ -1,6 +1,7 @@
 "use server";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { db } from "@/db";
@@ -31,6 +32,13 @@ export default async function DashboardPage() {
       <h1>Dashboard</h1>
       <p>Name: {session?.user?.name}</p>
       <p>Email: {session?.user?.email}</p>
+      <Image
+        className="rounded-full"
+        src={session?.user?.image as string}
+        alt="image-profile"
+        width={48}
+        height={48}
+      />
       <ButtonSignOut />
     </div>
   );

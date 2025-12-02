@@ -45,7 +45,7 @@ export function SignUpForm() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
+  const handleSignUp = async (data: z.infer<typeof signUpSchema>) => {
     await authClient.signUp.email(
       {
         name: data?.name,
@@ -81,7 +81,10 @@ export function SignUpForm() {
         <CardContent className="grid gap-6">
           {/* inputs */}
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form
+              onSubmit={form.handleSubmit(handleSignUp)}
+              className="space-y-4"
+            >
               <FormField
                 control={form.control}
                 name="name"
