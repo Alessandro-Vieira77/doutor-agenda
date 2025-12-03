@@ -1,3 +1,4 @@
+"use client";
 import {
   CalendarDays,
   LayoutDashboard,
@@ -7,6 +8,8 @@ import {
   UsersRound,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -32,31 +35,38 @@ import {
 const items = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/dashboard",
     icon: LayoutDashboard,
   },
   {
     title: "Agedamentos",
-    url: "#",
+    url: "/appointments",
     icon: CalendarDays,
   },
   {
     title: "Médicos",
-    url: "#",
+    url: "/doctors",
     icon: Stethoscope,
   },
   {
     title: "Pacientes",
-    url: "#",
+    url: "/patients",
     icon: UsersRound,
   },
 ];
 
 export function AppSidebar() {
+  const pathName = usePathname();
   return (
     <Sidebar>
       <SidebarHeader className="py-6 pl-8">
-        <Image src="/logo.svg" alt="Logo" width={136} height={28} />
+        <Image
+          src="/logo.svg"
+          alt="Logo"
+          width={136}
+          height={28}
+          loading="lazy"
+        />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -65,11 +75,17 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathName === item.url}
+                    className={`data-[active=true]:bg-sidebar-primary/10 data-[active=true]:text-sidebar-primary hover:bg-sidebar-primary/10 hover:text-sidebar-primary hover:font-semibold`}
+                  >
+                    <Link href={item.url}>
+                      <item.icon
+                        color={pathName === item.url ? "var(--primary)" : ""}
+                      />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
