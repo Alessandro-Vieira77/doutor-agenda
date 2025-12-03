@@ -9,9 +9,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,6 +31,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { authClient } from "@/lib/auth-client";
 
 // Menu items.
 const items = [
@@ -56,7 +58,13 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const router = useRouter();
   const pathName = usePathname();
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    router.push("/authentication");
+  };
 
   return (
     <Sidebar>
@@ -121,8 +129,14 @@ export function AppSidebar() {
                 className="flex items-center gap-4"
               >
                 <DropdownMenuItem className="flex w-full items-center gap-4">
-                  <LogOut size={24} color="var(--primary)" />
-                  <span>logout</span>
+                  <Button
+                    variant="ghost"
+                    onClick={handleLogout}
+                    className="flex gap-2"
+                  >
+                    <LogOut size={24} color="var(--primary)" />
+                    <span>logout</span>
+                  </Button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
