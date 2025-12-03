@@ -63,7 +63,21 @@ export function AppSidebar() {
 
   const handleLogout = async () => {
     await authClient.signOut();
+    await authClient.revokeSessions();
     router.push("/authentication");
+  };
+
+  const session = authClient.useSession();
+
+  const handleAcronym = (name: string) => {
+    return name
+      ?.split(" ")
+      ?.map((chart, index) => {
+        if (index > 1) return;
+        return chart[0];
+      })
+      ?.join("")
+      ?.toUpperCase();
   };
 
   return (
@@ -87,7 +101,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     isActive={pathName === item.url}
-                    className={`data-[active=true]:bg-sidebar-primary/10 data-[active=true]:text-sidebar-primary hover:bg-sidebar-primary/10 hover:text-sidebar-primary hover:font-semibold`}
+                    className={`data-[active=true]:bg-sidebar-primary/10 data-[active=true]:text-sidebar-primary hover:text-sidebar-primary hover:font-semibold`}
                   >
                     <Link href={item.url}>
                       <item.icon color={"var(--primary)"} />
@@ -109,15 +123,21 @@ export function AppSidebar() {
                   <div className="flex items-center gap-2">
                     <Avatar className="h-10 w-10 rounded-lg">
                       <AvatarImage
-                        src="https://github.com/shadcn.png"
+                        src={session.data?.user?.image as string}
                         alt="image profile"
                       />
-                      <AvatarFallback>SC</AvatarFallback>
+                      <AvatarFallback className="h-10 w-10 rounded-lg">
+                        {handleAcronym(
+                          session.data?.user?.clinic?.name as string,
+                        )}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col gap-0.5">
-                      <p className="text-sm font-bold">Shadcn</p>
-                      <p className="text-muted-foreground text-xs">
-                        valessando33@gmail.com
+                      <p className="w-40 truncate text-sm font-bold">
+                        {session.data?.user?.name}
+                      </p>
+                      <p className="text-muted-foreground w-40 truncate text-xs">
+                        {session.data?.user?.email}
                       </p>
                     </div>
                   </div>

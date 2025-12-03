@@ -70,7 +70,7 @@ export function SignInForm() {
       },
       {
         onSuccess: () => {
-          toast.success("Login realizado com sucesso ok");
+          toast.success("Login realizado com sucesso");
         },
         onError: () => {
           toast.error("Senha ou email inválido");
