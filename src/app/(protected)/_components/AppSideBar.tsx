@@ -134,7 +134,7 @@ export function AppSidebar() {
                     </Avatar>
                     <div className="flex flex-col gap-0.5">
                       <p className="w-40 truncate text-sm font-bold">
-                        {session.data?.user?.name}
+                        {session.data?.user?.clinic?.name}
                       </p>
                       <p className="text-muted-foreground w-40 truncate text-xs">
                         {session.data?.user?.email}
