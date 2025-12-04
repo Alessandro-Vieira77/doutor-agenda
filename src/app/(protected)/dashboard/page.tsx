@@ -4,6 +4,11 @@ import { headers } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
+import {
+  ReusableContainer,
+  ReusableContainerHeader,
+  ReusableContainerNav,
+} from "@/components/reusables-containers";
 import { db } from "@/db";
 import { usersToClinicsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
@@ -28,7 +33,12 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div>
+    <ReusableContainer>
+      <ReusableContainerNav name="Dashboard" />
+      <ReusableContainerHeader
+        title="Dashboard"
+        description="Acesse uma visão geral detalhada das principais métricas e resultados dos pacientes."
+      />
       <h1>Dashboard</h1>
       <p>Name: {session?.user?.name}</p>
       <p>Email: {session?.user?.email}</p>
@@ -40,6 +50,7 @@ export default async function DashboardPage() {
         height={48}
       />
       <ButtonSignOut />
-    </div>
+      <h2>ok</h2>
+    </ReusableContainer>
   );
 }
