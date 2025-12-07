@@ -1,13 +1,28 @@
+import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
+
 import {
   ReusableContainer,
   ReusableContainerContent,
   ReusableContainerHeader,
   ReusableContainerNav,
 } from "@/components/reusables-containers";
+import { db } from "@/db";
+import { doctorsTable } from "@/db/schema";
+import { auth } from "@/lib/auth";
 
 import { AddDoctorButton } from "./_components/add-doctor-button";
+import { DoctorCard } from "./_components/doctor-card";
 
-export default function Doctors() {
+export default async function Doctors() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const doctors = await db.query.doctorsTable.findMany({
+    where: eq(doctorsTable.clinicId, session?.user?.clinic.id as string),
+  });
+
+  console.log(doctors);
   return (
     <ReusableContainer>
       <ReusableContainerNav name="Doctors" />
@@ -17,7 +32,11 @@ export default function Doctors() {
         button={<AddDoctorButton />}
       />
       <ReusableContainerContent>
-        <h1>Doctors</h1>
+        <div className="grid grid-cols-3 gap-4">
+          {doctors?.map((doctor) => (
+            <DoctorCard key={doctor.id} doctor={doctor} />
+          ))}
+        </div>
       </ReusableContainerContent>
     </ReusableContainer>
   );

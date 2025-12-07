@@ -34,7 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { medicalSpecialties } from "../constants";
+import { medicalSpecialties } from "../constants/index";
 
 const doctorSchema = z
   .object({
@@ -54,7 +54,7 @@ const doctorSchema = z
   });
 
 interface UpsertDoctorFormProps {
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 export function UpsertDoctorForm({ onSuccess }: UpsertDoctorFormProps) {
@@ -74,7 +74,7 @@ export function UpsertDoctorForm({ onSuccess }: UpsertDoctorFormProps) {
   const upsertDoctorAction = useAction(upsertDoctor, {
     onSuccess: () => {
       toast.success("Médico salvo com sucesso");
-      onSuccess();
+      onSuccess?.();
     },
     onError: (error) => {
       console.log(error);
