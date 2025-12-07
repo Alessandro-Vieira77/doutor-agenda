@@ -1,12 +1,11 @@
-import { Plus } from "lucide-react";
-
 import {
   ReusableContainer,
   ReusableContainerContent,
   ReusableContainerHeader,
   ReusableContainerNav,
 } from "@/components/reusables-containers";
-import { Button } from "@/components/ui/button";
+
+import { AddDoctorButton } from "./_components/add-doctor-button";
 
 export default function Doctors() {
   return (
@@ -15,12 +14,7 @@ export default function Doctors() {
       <ReusableContainerHeader
         title="Médicos"
         description="Acesse uma visão geral detalhada das principais métricas e resultados dos pacientes."
-        button={
-          <Button className="flex items-center gap-2 self-end">
-            {" "}
-            <Plus size={20} /> Adicionar Médicos
-          </Button>
-        }
+        button={<AddDoctorButton />}
       />
       <ReusableContainerContent>
         <h1>Doctors</h1>

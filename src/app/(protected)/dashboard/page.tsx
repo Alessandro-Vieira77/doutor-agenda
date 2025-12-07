@@ -42,13 +42,15 @@ export default async function DashboardPage() {
       <h1>Dashboard</h1>
       <p>Name: {session?.user?.name}</p>
       <p>Email: {session?.user?.email}</p>
-      <Image
-        className="rounded-full"
-        src={session?.user?.image as string}
-        alt="image-profile"
-        width={48}
-        height={48}
-      />
+      {session?.user?.image && (
+        <Image
+          className="rounded-full"
+          src={session?.user?.image as string}
+          alt="image-profile"
+          width={48}
+          height={48}
+        />
+      )}
       <ButtonSignOut />
       <h2>ok</h2>
     </ReusableContainer>
