@@ -1,8 +1,8 @@
 "use server";
-
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { headers } from "next/headers";
 
-// import { returnValidationErrors } from "next-safe-action";
 import { db } from "@/db";
 import { doctorsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
@@ -13,6 +13,23 @@ import { upsertDoctorSchema } from "./schema";
 export const upsertDoctor = actionClient
   .schema(upsertDoctorSchema)
   .action(async ({ parsedInput }) => {
+    dayjs.extend(utc);
+
+    const availabreFromTime = parsedInput.availableFromTime;
+    const availabreToTime = parsedInput.availableToTime;
+
+    const availableFromTimeDayJs = dayjs()
+      .set("hour", parseInt(availabreFromTime.split(":")[0]))
+      .set("minute", parseInt(availabreFromTime.split(":")[1]))
+      .set("second", parseInt(availabreFromTime.split(":")[2]))
+      .utc();
+
+    const availableToTimeDayJs = dayjs()
+      .set("hour", parseInt(availabreToTime.split(":")[0]))
+      .set("minute", parseInt(availabreToTime.split(":")[1]))
+      .set("second", parseInt(availabreToTime.split(":")[2]))
+      .utc();
+
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -21,7 +38,7 @@ export const upsertDoctor = actionClient
       throw new Error("Unauthorized");
     }
 
-    if (!session?.user?.clinic.id) {
+    if (!session?.user?.clinic) {
       throw new Error("Unauthorized");
     }
 
@@ -29,14 +46,18 @@ export const upsertDoctor = actionClient
       .insert(doctorsTable)
       .values({
         ...parsedInput,
-        id: parsedInput.id,
-        clinicId: session?.user?.clinic.id,
+        id: parsedInput?.id,
+        clinicId: session.user.clinic.id,
+        availableFromTime: availableFromTimeDayJs.format("HH:mm:ss"),
+        availableToTime: availableToTimeDayJs.format("HH:mm:ss"),
       })
       .onConflictDoUpdate({
-        target: [doctorsTable.id],
+        target: doctorsTable.id,
         set: {
           ...parsedInput,
-          clinicId: session.user?.clinic.id,
+          clinicId: session.user.clinic.id,
+          availableFromTime: availableFromTimeDayJs.format("HH:mm:ss"),
+          availableToTime: availableToTimeDayJs.format("HH:mm:ss"),
         },
       });
   });
