@@ -11,11 +11,11 @@ import { actionClient } from "@/lib/safe-action";
 
 import { upsertDoctorSchema } from "./schema";
 
+dayjs.extend(utc);
+
 export const upsertDoctor = actionClient
   .schema(upsertDoctorSchema)
   .action(async ({ parsedInput }) => {
-    dayjs.extend(utc);
-
     const availabreFromTime = parsedInput.availableFromTime;
     const availabreToTime = parsedInput.availableToTime;
 
@@ -47,16 +47,15 @@ export const upsertDoctor = actionClient
       .insert(doctorsTable)
       .values({
         ...parsedInput,
-        id: parsedInput?.id,
-        clinicId: session.user.clinic.id,
+        id: parsedInput.id,
+        clinicId: session?.user?.clinic?.id,
         availableFromTime: availableFromTimeDayJs.format("HH:mm:ss"),
         availableToTime: availableToTimeDayJs.format("HH:mm:ss"),
       })
       .onConflictDoUpdate({
-        target: doctorsTable.id,
+        target: [doctorsTable.id],
         set: {
           ...parsedInput,
-          clinicId: session.user.clinic.id,
           availableFromTime: availableFromTimeDayJs.format("HH:mm:ss"),
           availableToTime: availableToTimeDayJs.format("HH:mm:ss"),
         },

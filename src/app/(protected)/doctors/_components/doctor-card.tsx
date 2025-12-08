@@ -51,7 +51,7 @@ export const DoctorCard = async ({
         </div>
       </CardHeader>
       <Separator />
-      <CardContent className="flex flex-col gap-5">
+      <CardContent className="flex flex-col gap-6">
         <Badge variant="outline">
           <Calendar1Icon size={16} />
           <p>
@@ -78,7 +78,14 @@ export const DoctorCard = async ({
             <Button className="w-full">Ver detalhes</Button>
           </DialogTrigger>
           <DialogContent>
-            <UpsertDoctorForm />
+            <UpsertDoctorForm
+              doctor={{
+                ...doctor,
+                clinicId: doctor.clinicId,
+                availableFromTime: availability.from.format("HH:mm:ss"),
+                availableToTime: availability.to.format("HH:mm:ss"),
+              }}
+            />
           </DialogContent>
         </Dialog>
       </CardFooter>

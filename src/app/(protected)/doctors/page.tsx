@@ -22,7 +22,6 @@ export default async function Doctors() {
     where: eq(doctorsTable.clinicId, session?.user?.clinic.id as string),
   });
 
-  console.log(doctors);
   return (
     <ReusableContainer>
       <ReusableContainerNav name="Doctors" />
