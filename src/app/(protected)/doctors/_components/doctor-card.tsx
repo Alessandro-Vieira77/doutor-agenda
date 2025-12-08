@@ -1,5 +1,7 @@
+"use client";
 import { Dialog } from "@radix-ui/react-dialog";
 import { Calendar1Icon, Clock, DollarSignIcon, ScanHeart } from "lucide-react";
+import { useState } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -18,11 +20,13 @@ import { numberFormarCentsBR } from "@/helpers/currency";
 import { getAvailabilityTime, numberToDay } from "../_helpers/availability";
 import { UpsertDoctorForm } from "./upsert-doctor-form";
 
-export const DoctorCard = async ({
+export const DoctorCard = ({
   doctor,
 }: {
   doctor: typeof doctorsTable.$inferSelect;
 }) => {
+  const [open, setOpen] = useState(false);
+
   const abbreviationName = doctor?.name
     .split(" ")
     .map((word, index) => {
@@ -73,7 +77,7 @@ export const DoctorCard = async ({
       </CardContent>
       <Separator />
       <CardFooter>
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="w-full">Ver detalhes</Button>
           </DialogTrigger>
@@ -85,6 +89,7 @@ export const DoctorCard = async ({
                 availableFromTime: availability.from.format("HH:mm:ss"),
                 availableToTime: availability.to.format("HH:mm:ss"),
               }}
+              onSuccess={() => setOpen(false)}
             />
           </DialogContent>
         </Dialog>
