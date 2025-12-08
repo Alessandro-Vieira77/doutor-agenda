@@ -18,6 +18,7 @@ import { doctorsTable } from "@/db/schema";
 import { numberFormarCentsBR } from "@/helpers/currency";
 
 import { getAvailabilityTime, numberToDay } from "../_helpers/availability";
+import { DeleteDoctor } from "./delect-doctor";
 import { UpsertDoctorForm } from "./upsert-doctor-form";
 
 export const DoctorCard = ({
@@ -41,7 +42,7 @@ export const DoctorCard = ({
   const price = numberFormarCentsBR(doctor.appointmentPriceInCents);
 
   return (
-    <Card>
+    <Card className="relative">
       <CardHeader className="flex items-center gap-4">
         <Avatar className="h-16 w-16">
           <AvatarFallback>{abbreviationName}</AvatarFallback>
@@ -52,6 +53,9 @@ export const DoctorCard = ({
             <ScanHeart size={26} color="var(--primary)" />
             {doctor?.specialty}
           </p>
+        </div>
+        <div className="absolute top-2 right-2">
+          <DeleteDoctor id={doctor?.id as string} />
         </div>
       </CardHeader>
       <Separator />
