@@ -1,3 +1,4 @@
+import { ColumnsTable } from "@/app/(protected)/patients/_components/table-colums";
 import {
   Table,
   TableBody,
@@ -7,10 +8,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { columns } from "./data-table";
-export { columns } from "../../app/(protected)/patients/_components/table-colums";
+export async function DataTable() {
+  const columns = await ColumnsTable();
 
-export function DataTable() {
   return (
     <Table>
       <TableHeader>
