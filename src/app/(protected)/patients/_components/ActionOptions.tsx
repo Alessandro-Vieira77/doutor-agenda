@@ -16,6 +16,7 @@ import {
 import { patientsTable } from "@/db/schema";
 
 import { AddPatientForm } from "./add-patient-form";
+import { DeletePatient } from "./delete-patient";
 
 export const ActionOptions = ({
   patient,
@@ -23,6 +24,7 @@ export const ActionOptions = ({
   patient: typeof patientsTable.$inferSelect;
 }) => {
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   return (
     <>
       <DropdownMenu>
@@ -39,7 +41,11 @@ export const ActionOptions = ({
               <EditIcon size={20} color="var(--primary)" />
               Editar
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setOpenDelete(true);
+              }}
+            >
               <Trash2Icon size={20} color="var(--destructive)" /> Excluir
             </DropdownMenuItem>
           </DropdownMenuGroup>
@@ -48,6 +54,11 @@ export const ActionOptions = ({
       <Dialog open={open} onOpenChange={setOpen}>
         <AddPatientForm patient={patient} onSuccess={() => setOpen(false)} />
       </Dialog>
+      <DeletePatient
+        id={patient.id}
+        openDelete={openDelete}
+        setOpenDelete={setOpenDelete}
+      />
     </>
   );
 };

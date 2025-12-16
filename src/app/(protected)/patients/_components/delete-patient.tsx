@@ -1,4 +1,3 @@
-import { Trash2Icon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 
 import { deletePatient } from "@/actions/delete-patient";
@@ -11,20 +10,23 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 
-export function DeletePatient({ id }: { id: string }) {
+interface DeletePatientProps {
+  id: string;
+  openDelete?: boolean;
+  setOpenDelete?: (open: boolean) => void;
+}
+
+export function DeletePatient({
+  id,
+  openDelete,
+  setOpenDelete,
+}: DeletePatientProps) {
   const deletePatientAction = useAction(deletePatient);
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">
-          <Trash2Icon color="var(--destructive)" size={20} />
-        </Button>
-      </AlertDialogTrigger>
+    <AlertDialog open={openDelete} onOpenChange={setOpenDelete}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
