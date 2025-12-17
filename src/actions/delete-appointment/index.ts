@@ -1,0 +1,23 @@
+"use server";
+
+import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+import { db } from "@/db";
+import { appointmentsTable } from "@/db/schema";
+import { actionClient } from "@/lib/safe-action";
+
+const deleteAppointmentSchema = z.object({
+  id: z.string().uuid(),
+});
+
+export const deleteAppointment = actionClient
+  .schema(deleteAppointmentSchema)
+  .action(async ({ parsedInput }) => {
+    await db
+      .delete(appointmentsTable)
+      .where(eq(appointmentsTable.id, parsedInput.id));
+
+    revalidatePath("/appointments");
+  });

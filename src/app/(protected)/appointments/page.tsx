@@ -12,6 +12,7 @@ import { doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import { AddAppointmentButton } from "./_components/add-appointment-button";
+import { AppointmentsDataTable } from "./_components/appointments-data-table";
 
 export default async function Appointments() {
   const session = await auth.api.getSession({
@@ -35,9 +36,7 @@ export default async function Appointments() {
         button={<AddAppointmentButton patients={patients} doctors={doctors} />}
       />
       <ReusableContainerContent>
-        <p className="text-muted-foreground">
-          Listagem de agendamentos será implementada futuramente
-        </p>
+        <AppointmentsDataTable />
       </ReusableContainerContent>
     </ReusableContainer>
   );
