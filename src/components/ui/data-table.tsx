@@ -23,15 +23,23 @@ export async function DataTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {columns?.map((column) => (
-          <TableRow key={column.name as string}>
-            <TableCell>{column.name}</TableCell>
-            <TableCell>{column.email}</TableCell>
-            <TableCell>{column.phoneNumber}</TableCell>
-            <TableCell>{column.sex()}</TableCell>
-            <TableCell className="text-right">{column.cell()}</TableCell>
+        {columns.length > 0 ? (
+          columns.map((column) => (
+            <TableRow key={column.id}>
+              <TableCell>{column.name}</TableCell>
+              <TableCell>{column.email}</TableCell>
+              <TableCell>{column.phoneNumber}</TableCell>
+              <TableCell>{column.sex()}</TableCell>
+              <TableCell className="text-right">{column.cell()}</TableCell>
+            </TableRow>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={5} className="h-24 text-center font-semibold">
+              Nenhum registro encontrado.
+            </TableCell>
           </TableRow>
-        ))}
+        )}
       </TableBody>
     </Table>
   );
