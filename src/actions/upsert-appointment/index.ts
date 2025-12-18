@@ -8,6 +8,7 @@ import { appointmentsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/safe-action";
 
+import { getAvailableTimes } from "../get-available-times";
 import { upsertAppointmentSchema } from "./schema";
 
 export const upsertAppointment = actionClient
@@ -23,6 +24,20 @@ export const upsertAppointment = actionClient
 
     if (!session?.user?.clinic) {
       throw new Error("Unauthorized");
+    }
+
+    const availableTimes = await getAvailableTimes({
+      doctorId: parsedInput.doctorId,
+      date: dayjs(parsedInput.date).format("YYYY-MM-DD"),
+    });
+    if (!availableTimes?.data) {
+      throw new Error("No available times");
+    }
+    const isTimeAvailable = availableTimes.data?.some(
+      (time) => time.time === parsedInput.time && time.isAvailable,
+    );
+    if (!isTimeAvailable) {
+      throw new Error("Time not available");
     }
 
     // Combina a data com o horário selecionado

@@ -103,6 +103,7 @@ export function UpsertAppointmentForm({
         doctorId: selectedDoctorId,
         date: dayjs(selectedDate).format("YYYY-MM-DD"),
       }),
+    enabled: !!selectedDoctorId && !!selectedDate,
   });
 
   // Atualiza o preço quando o médico é selecionado
