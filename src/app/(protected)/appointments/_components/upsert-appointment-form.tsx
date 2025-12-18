@@ -279,8 +279,12 @@ export function UpsertAppointmentForm({
                     </SelectTrigger>
                     <SelectContent>
                       {availableTimes?.data?.map((time) => (
-                        <SelectItem key={time.time} value={time.time}>
-                          {time.label}
+                        <SelectItem
+                          key={time.time}
+                          value={time.time}
+                          disabled={!time.isAvailable}
+                        >
+                          {time.label} {!time.isAvailable && "(Indisponível)"}
                         </SelectItem>
                       ))}
                     </SelectContent>
