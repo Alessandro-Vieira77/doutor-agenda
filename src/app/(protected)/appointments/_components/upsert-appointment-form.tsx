@@ -126,6 +126,19 @@ export function UpsertAppointmentForm({
 
   const isDateAndTimeEnabled = !!selectedPatientId && !!selectedDoctorId;
 
+  const isDateAvailable = (date: Date) => {
+    if (!selectedDoctorId) return false;
+    const selectedDoctor = doctors.find(
+      (doctor) => doctor.id === selectedDoctorId,
+    );
+    if (!selectedDoctor) return false;
+    const dayOfWeek = date.getDay();
+    return (
+      dayOfWeek >= selectedDoctor?.availableFromWeekDay &&
+      dayOfWeek <= selectedDoctor?.availableToWeekDay
+    );
+  };
+
   return (
     <DialogContent>
       <DialogHeader>
@@ -253,6 +266,7 @@ export function UpsertAppointmentForm({
                           setDatePickerOpen(false);
                         }}
                         locale={ptBR}
+                        disabled={(date) => !isDateAvailable(date)}
                       />
                     </PopoverContent>
                   </Popover>
