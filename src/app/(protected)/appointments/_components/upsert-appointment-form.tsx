@@ -1,7 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { ptBR } from "date-fns/locale";
+import dayjs from "dayjs";
 import { ChevronDownIcon } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
@@ -10,6 +12,7 @@ import { NumericFormat } from "react-number-format";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { getAvailableTimes } from "@/actions/get-available-times";
 import { upsertAppointment } from "@/actions/upsert-appointment";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -38,9 +41,7 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -93,6 +94,16 @@ export function UpsertAppointmentForm({
 
   const selectedDoctorId = form.watch("doctorId");
   const selectedPatientId = form.watch("patientId");
+  const selectedDate = form.watch("date");
+
+  const { data: availableTimes } = useQuery({
+    queryKey: ["available-times", selectedDoctorId, selectedDate],
+    queryFn: () =>
+      getAvailableTimes({
+        doctorId: selectedDoctorId,
+        date: dayjs(selectedDate).format("YYYY-MM-DD"),
+      }),
+  });
 
   // Atualiza o preço quando o médico é selecionado
   const handleDoctorChange = (doctorId: string) => {
@@ -261,40 +272,17 @@ export function UpsertAppointmentForm({
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
-                    disabled={!isDateAndTimeEnabled}
+                    disabled={!isDateAndTimeEnabled || !selectedDate}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Selecione um horário" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Manhã</SelectLabel>
-                        <SelectItem value="08:00:00">08:00</SelectItem>
-                        <SelectItem value="08:30:00">08:30</SelectItem>
-                        <SelectItem value="09:00:00">09:00</SelectItem>
-                        <SelectItem value="09:30:00">09:30</SelectItem>
-                        <SelectItem value="10:00:00">10:00</SelectItem>
-                        <SelectItem value="10:30:00">10:30</SelectItem>
-                        <SelectItem value="11:00:00">11:00</SelectItem>
-                        <SelectItem value="11:30:00">11:30</SelectItem>
-                        <SelectItem value="12:00:00">12:00</SelectItem>
-                        <SelectItem value="12:30:00">12:30</SelectItem>
-                      </SelectGroup>
-                      <SelectGroup>
-                        <SelectLabel>Tarde</SelectLabel>
-                        <SelectItem value="13:00:00">13:00</SelectItem>
-                        <SelectItem value="13:30:00">13:30</SelectItem>
-                        <SelectItem value="14:00:00">14:00</SelectItem>
-                        <SelectItem value="14:30:00">14:30</SelectItem>
-                        <SelectItem value="15:00:00">15:00</SelectItem>
-                        <SelectItem value="15:30:00">15:30</SelectItem>
-                        <SelectItem value="16:00:00">16:00</SelectItem>
-                        <SelectItem value="16:30:00">16:30</SelectItem>
-                        <SelectItem value="17:00:00">17:00</SelectItem>
-                        <SelectItem value="17:30:00">17:30</SelectItem>
-                        <SelectItem value="18:00:00">18:00</SelectItem>
-                        <SelectItem value="18:30:00">18:30</SelectItem>
-                      </SelectGroup>
+                      {availableTimes?.data?.map((time) => (
+                        <SelectItem key={time.time} value={time.time}>
+                          {time.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
