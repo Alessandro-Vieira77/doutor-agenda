@@ -13,7 +13,8 @@ import { db } from "@/db";
 import { usersToClinicsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import { ButtonSignOut } from "./components/buttonSignOut";
+import { ButtonSignOut } from "./_components/buttonSignOut";
+import { DatePicker } from "./_components/date-picker";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -38,6 +39,7 @@ export default async function DashboardPage() {
       <ReusableContainerHeader
         title="Dashboard"
         description="Acesse uma visão geral detalhada das principais métricas e resultados dos pacientes."
+        button={<DatePicker />}
       />
       <h1>Dashboard</h1>
       <p>Name: {session?.user?.name}</p>
