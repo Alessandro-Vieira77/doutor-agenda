@@ -25,13 +25,13 @@ export const auth = betterAuth({
     modelName: "usersTable",
   },
   session: {
-    modelName: "sessionTable",
+    modelName: "sessionsTable",
   },
   account: {
-    modelName: "accountTable",
+    modelName: "accountsTable",
   },
   verification: {
-    modelName: "verificationTable",
+    modelName: "verificationsTable",
   },
   plugins: [
     customSession(async ({ user, session }) => {

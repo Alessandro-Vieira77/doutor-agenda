@@ -20,4 +20,5 @@ export const deleteAppointment = actionClient
       .where(eq(appointmentsTable.id, parsedInput.id));
 
     revalidatePath("/appointments");
+    revalidatePath("/dashboard");
   });

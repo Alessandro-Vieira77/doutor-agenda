@@ -1,7 +1,7 @@
 "use server";
-import { eq } from "drizzle-orm";
+
+import { and, count, eq, gte, lte, sum } from "drizzle-orm";
 import { headers } from "next/headers";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import {
@@ -10,13 +10,24 @@ import {
   ReusableContainerNav,
 } from "@/components/reusables-containers";
 import { db } from "@/db";
-import { usersToClinicsTable } from "@/db/schema";
+import {
+  appointmentsTable,
+  doctorsTable,
+  patientsTable,
+  usersToClinicsTable,
+} from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import { ButtonSignOut } from "./_components/buttonSignOut";
 import { DatePicker } from "./_components/date-picker";
+import { StartsCard } from "./_components/starts-card";
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams: Promise<{ from: string; to: string }>;
+}
+
+export default async function DashboardPage({
+  searchParams,
+}: DashboardPageProps) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -32,6 +43,55 @@ export default async function DashboardPage() {
   if (clinic.length === 0) {
     return redirect("/clinic-form");
   }
+  const { from, to } = await searchParams;
+
+  const fromDate =
+    from && !isNaN(new Date(from).getTime())
+      ? new Date(from)
+      : new Date("1970-01-01");
+
+  const toDate =
+    to && !isNaN(new Date(to).getTime()) ? new Date(to) : new Date();
+
+  const [[totalRevenue], [totalAppointments], [totalPatients], [totalDoctors]] =
+    await Promise.all([
+      db
+        .select({
+          total: sum(appointmentsTable.appointmentPriceInCents),
+        })
+        .from(appointmentsTable)
+        .where(
+          and(
+            eq(appointmentsTable.clinicId, session.user.clinic.id),
+            gte(appointmentsTable.date, fromDate),
+            lte(appointmentsTable.date, toDate),
+          ),
+        ),
+      db
+        .select({
+          total: count(),
+        })
+        .from(appointmentsTable)
+        .where(
+          and(
+            eq(appointmentsTable.clinicId, session.user.clinic.id),
+            gte(appointmentsTable.date, fromDate),
+            lte(appointmentsTable.date, toDate),
+          ),
+        ),
+      db
+        .select({
+          total: count(),
+        })
+        .from(patientsTable)
+        .where(eq(patientsTable.clinicId, session.user.clinic.id)),
+      db
+        .select({
+          total: count(),
+        })
+        .from(doctorsTable)
+        .where(eq(doctorsTable.clinicId, session.user.clinic.id)),
+    ]);
 
   return (
     <ReusableContainer>
@@ -41,20 +101,13 @@ export default async function DashboardPage() {
         description="Acesse uma visão geral detalhada das principais métricas e resultados dos pacientes."
         button={<DatePicker />}
       />
-      <h1>Dashboard</h1>
-      <p>Name: {session?.user?.name}</p>
-      <p>Email: {session?.user?.email}</p>
-      {session?.user?.image && (
-        <Image
-          className="rounded-full"
-          src={session?.user?.image as string}
-          alt="image-profile"
-          width={48}
-          height={48}
-        />
-      )}
-      <ButtonSignOut />
-      <h2>ok</h2>
+
+      <StartsCard
+        totalRevenue={Number(totalRevenue.total) || 0}
+        totalAppointments={Number(totalAppointments.total)}
+        totalPatients={Number(totalPatients.total)}
+        totalDoctors={Number(totalDoctors.total)}
+      />
     </ReusableContainer>
   );
 }

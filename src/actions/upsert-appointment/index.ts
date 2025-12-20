@@ -56,6 +56,7 @@ export const upsertAppointment = actionClient
         doctorId: parsedInput.doctorId,
         clinicId: session.user.clinic.id,
         date: appointmentDate,
+        appointmentPriceInCents: parsedInput.appointmentPriceInCents,
       })
       .onConflictDoUpdate({
         target: [appointmentsTable.id],
@@ -63,6 +64,7 @@ export const upsertAppointment = actionClient
           patientId: parsedInput.patientId,
           doctorId: parsedInput.doctorId,
           date: appointmentDate,
+          appointmentPriceInCents: parsedInput.appointmentPriceInCents,
         },
       });
 

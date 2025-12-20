@@ -2,6 +2,7 @@
 
 import "dayjs/locale/pt-br";
 
+import { addMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import dayjs from "dayjs";
 import { CalendarDays } from "lucide-react";
@@ -27,7 +28,7 @@ export function DatePicker() {
 
   const [to, setTo] = useQueryState(
     "to",
-    parseAsIsoDate.withDefault(dayjs(new Date()).add(1, "month").toDate()),
+    parseAsIsoDate.withDefault(addMonths(new Date(), 1)),
   );
 
   const dateRange = {
@@ -37,10 +38,10 @@ export function DatePicker() {
 
   const handleDateSelect = (dateRange: DateRange | undefined) => {
     if (dateRange?.from) {
-      setFrom(dateRange?.from);
+      setFrom(dateRange.from, { shallow: false });
     }
     if (dateRange?.to) {
-      setTo(dateRange?.to);
+      setTo(dateRange.to, { shallow: false });
     }
   };
 
