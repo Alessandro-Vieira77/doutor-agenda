@@ -1,31 +1,52 @@
 "use server";
 
 import dayjs from "dayjs";
-import { eq } from "drizzle-orm";
-import { headers } from "next/headers";
-
-import { db } from "@/db";
-import { appointmentsTable } from "@/db/schema";
-import { auth } from "@/lib/auth";
 
 import { ActionOptions } from "./ActionOptions";
 
-export const ColumnsTable = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+export interface AppointmentsWithPatientAndDoctor {
+  id: string;
+  date: Date;
+  appointmentPriceInCents: number;
+  createdAt: Date;
+  updatedAt: Date | null;
+  clinicId: string;
+  patientId: string;
+  doctorId: string;
+  patient: {
+    id: string;
+    name: string;
+    createdAt: Date;
+    updatedAt: Date | null;
+    clinicId: string;
+    email: string;
+    phoneNumber: string;
+    sex: "male" | "female";
+  };
+  doctor: {
+    id: string;
+    name: string;
+    appointmentPriceInCents: number;
+    createdAt: Date;
+    updatedAt: Date | null;
+    clinicId: string;
+    avatarImageUrl: string | null;
+    availableFromWeekDay: number;
+    availableToWeekDay: number;
+    availableFromTime: string;
+    availableToTime: string;
+    specialty: string;
+  };
+}
 
-  const appointments = await db.query.appointmentsTable.findMany({
-    where: eq(appointmentsTable.clinicId, session?.user?.clinic.id as string),
-    with: {
-      patient: true,
-      doctor: true,
-    },
-  });
-
+export const ColumnsTable = async ({
+  appointments,
+}: {
+  appointments: AppointmentsWithPatientAndDoctor[];
+}) => {
   const columns = appointments?.map((appointment) => ({
     id: appointment.id,
-    patient: appointment.patient.name,
+    patient: appointment?.patient.name,
     doctor: appointment.doctor.name,
     specialty: appointment.doctor.specialty,
     date: dayjs(appointment.date).format("DD/MM/YYYY"),

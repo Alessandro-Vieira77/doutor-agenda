@@ -8,8 +8,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-export async function AppointmentsDataTable() {
-  const columns = await ColumnsTable();
+import { AppointmentsWithPatientAndDoctor } from "./table-columns";
+
+export async function AppointmentsDataTable({
+  appointments,
+}: {
+  appointments: AppointmentsWithPatientAndDoctor[];
+}) {
+  const columns = await ColumnsTable({ appointments });
 
   return (
     <Table>
@@ -24,7 +30,7 @@ export async function AppointmentsDataTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {columns.length > 0 ? (
+        {columns?.length > 0 ? (
           columns.map((column) => (
             <TableRow key={column.id}>
               <TableCell>{column.patient}</TableCell>

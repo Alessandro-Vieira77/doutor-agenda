@@ -8,7 +8,7 @@ import {
   ReusableContainerNav,
 } from "@/components/reusables-containers";
 import { db } from "@/db";
-import { doctorsTable, patientsTable } from "@/db/schema";
+import { appointmentsTable, doctorsTable, patientsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import { AddAppointmentButton } from "./_components/add-appointment-button";
@@ -27,6 +27,14 @@ export default async function Appointments() {
     where: eq(doctorsTable.clinicId, session?.user?.clinic.id as string),
   });
 
+  const appointments = await db.query.appointmentsTable.findMany({
+    where: eq(appointmentsTable.clinicId, session?.user?.clinic.id as string),
+    with: {
+      patient: true,
+      doctor: true,
+    },
+  });
+
   return (
     <ReusableContainer>
       <ReusableContainerNav name="Agendamentos" />
@@ -36,7 +44,7 @@ export default async function Appointments() {
         button={<AddAppointmentButton patients={patients} doctors={doctors} />}
       />
       <ReusableContainerContent>
-        <AppointmentsDataTable />
+        <AppointmentsDataTable appointments={appointments} />
       </ReusableContainerContent>
     </ReusableContainer>
   );
