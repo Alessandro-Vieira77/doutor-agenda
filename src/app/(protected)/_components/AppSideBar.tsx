@@ -1,6 +1,7 @@
 "use client";
 import {
   CalendarDays,
+  Gem,
   LayoutDashboard,
   LogOut,
   MoreVertical,
@@ -110,6 +111,24 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Outros</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  // isActive={pathname === "/subscription"}
+                >
+                  <Link href="/subscription">
+                    <Gem color="var(--primary)" />
+                    <span>Assinatura</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
