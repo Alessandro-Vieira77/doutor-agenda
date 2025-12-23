@@ -24,10 +24,8 @@ export const createStripeCheckout = actionClient.action(async () => {
     mode: "subscription",
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
-    subscription_data: {
-      metadata: {
-        userId: session.user.id,
-      },
+    metadata: {
+      userId: session.user.id,
     },
     line_items: [
       {
