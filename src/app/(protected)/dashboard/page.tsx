@@ -38,6 +38,12 @@ export default async function DashboardPage({
   if (!session?.user) {
     redirect("/authentication");
   }
+  if (!session.user.clinic) {
+    redirect("/clinic-form");
+  }
+  if (!session.user.plan) {
+    redirect("/new-subscription");
+  }
 
   const clinic = await db.query.usersToClinicsTable.findMany({
     where: eq(usersToClinicsTable.userId, session.user.id),

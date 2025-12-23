@@ -1,4 +1,5 @@
-"use client";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,10 +10,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { auth } from "@/lib/auth";
 
 import { FormClinic } from "./components/form-clinic";
 
-export default function ClinicFormPage() {
+export default async function ClinicFormPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    redirect("/login");
+  }
+  if (!session.user.plan) {
+    redirect("/new-subscription");
+  }
+
   return (
     <div className="flex h-screen w-full items-center justify-center">
       <Dialog open={true}>
