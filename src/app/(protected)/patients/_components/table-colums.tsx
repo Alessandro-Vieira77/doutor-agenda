@@ -20,7 +20,7 @@ export const ColumnsTable = async () => {
   });
 
   const patients = await db.query.patientsTable.findMany({
-    where: eq(patientsTable.clinicId, session?.user?.clinic.id as string),
+    where: eq(patientsTable.clinicId, session?.user?.clinic?.id as string),
   });
 
   const columns = patients?.map((patient) => ({
