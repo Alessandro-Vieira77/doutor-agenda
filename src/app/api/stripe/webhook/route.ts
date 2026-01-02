@@ -13,12 +13,12 @@ export const POST = async (request: Request) => {
   if (!signature) {
     throw new Error("Stripe signature not found");
   }
-  const text = await request.text();
+  const body = await request.text();
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-    apiVersion: "2025-05-28.basil",
+    apiVersion: "2025-12-15.clover",
   });
   const event = stripe.webhooks.constructEvent(
-    text,
+    body,
     signature,
     process.env.STRIPE_WEBHOOK_SECRET,
   );
@@ -26,27 +26,38 @@ export const POST = async (request: Request) => {
   console.log("tipo encontrado: " + event.type);
 
   switch (event.type) {
-    case "checkout.session.completed": {
+    case "invoice.paid": {
+      console.log("entrou no evento invoice.paid");
       if (!event.data.object.id) {
         throw new Error("Subscription ID not found");
       }
 
-      const session = event.data.object as Stripe.Checkout.Session;
+      const { customer } = event.data.object as unknown as {
+        customer: string;
+      };
+
+      const session = event.data.object.parent as unknown as {
+        subscription_details: {
+          subscription: string;
+          metadata: {
+            userId: string;
+          };
+        };
+      };
       if (!session) {
         throw new Error("Session not found");
       }
-      if (!session.metadata?.userId) {
+      if (!session.subscription_details?.metadata?.userId) {
         throw new Error("User ID not found");
       }
-      const userId = session.metadata?.userId;
-      const customerId = session.customer as string;
-      const subscriptionId = session.subscription as string;
+      const userId = session.subscription_details?.metadata?.userId;
+      const subscriptionId = session.subscription_details.subscription;
 
       await db
         .update(usersTable)
         .set({
           stripeSubscriptionId: subscriptionId,
-          stripeCustomerId: customerId,
+          stripeCustomerId: customer,
           plan: "essential",
         })
         .where(eq(usersTable.id, userId));
