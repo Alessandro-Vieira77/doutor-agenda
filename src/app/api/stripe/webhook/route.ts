@@ -5,86 +5,72 @@ import Stripe from "stripe";
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
-export async function POST(request: Request) {
-  if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    return new NextResponse("Webhook secret not configured", { status: 500 });
+export const POST = async (request: Request) => {
+  if (!process.env.STRIPE_SECRET_KEY || !process.env.STRIPE_WEBHOOK_SECRET) {
+    throw new Error("Stripe secret key not found");
   }
-
   const signature = request.headers.get("stripe-signature");
   if (!signature) {
-    return new NextResponse("Missing Stripe signature", { status: 400 });
+    throw new Error("Stripe signature not found");
   }
-
-  const body = await request.text();
-
-  let event: Stripe.Event;
-
-  try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET,
-    );
-  } catch (err: any) {
-    console.error("❌ Invalid Stripe signature:", err.message);
-    return new NextResponse("Invalid signature", { status: 400 });
-  }
-
-  console.log("✅ Evento recebido:", event.type);
+  const text = await request.text();
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: "2025-12-15.clover",
+  });
+  const event = stripe.webhooks.constructEvent(
+    text,
+    signature,
+    process.env.STRIPE_WEBHOOK_SECRET,
+  );
 
   switch (event.type) {
-    case "invoice.payment_succeeded": {
-      const invoice = event.data.object as unknown as {
+    case "invoice.paid": {
+      if (!event.data.object.id) {
+        throw new Error("Subscription ID not found");
+      }
+      const { customer } = event.data.object as unknown as {
         customer: string;
-        subscription: string;
+      };
+      const { subscription_details } = event.data.object.parent as unknown as {
         subscription_details: {
+          subscription: string;
           metadata: {
             userId: string;
           };
         };
       };
-
-      if (
-        typeof invoice.customer !== "string" ||
-        typeof invoice.subscription !== "string"
-      ) {
-        console.error("Invoice missing customer or subscription");
-        break;
+      const subscription = subscription_details.subscription;
+      if (!subscription) {
+        throw new Error("Subscription not found");
       }
-
-      const userId = invoice.subscription_details?.metadata?.userId;
-
+      const userId = subscription_details.metadata.userId;
       if (!userId) {
-        console.error("User ID not found in invoice metadata");
-        break;
+        throw new Error("User ID not found");
       }
-
       await db
         .update(usersTable)
         .set({
-          stripeCustomerId: invoice.customer,
-          stripeSubscriptionId: invoice.subscription,
+          stripeSubscriptionId: subscription,
+          stripeCustomerId: customer,
           plan: "essential",
         })
         .where(eq(usersTable.id, userId));
-
       break;
     }
-
     case "customer.subscription.deleted": {
-      const subscription = event.data.object as unknown as {
-        metadata: {
-          userId: string;
-        };
-      };
-
-      if (!subscription.metadata?.userId) {
-        console.error("User ID not found in subscription metadata");
-        break;
+      if (!event.data.object.id) {
+        throw new Error("Subscription ID not found");
       }
-
+      const subscription = await stripe.subscriptions.retrieve(
+        event.data.object.id,
+      );
+      if (!subscription) {
+        throw new Error("Subscription not found");
+      }
+      const userId = subscription.metadata.userId;
+      if (!userId) {
+        throw new Error("User ID not found");
+      }
       await db
         .update(usersTable)
         .set({
@@ -92,11 +78,10 @@ export async function POST(request: Request) {
           stripeCustomerId: null,
           plan: null,
         })
-        .where(eq(usersTable.id, subscription.metadata.userId));
-
-      break;
+        .where(eq(usersTable.id, userId));
     }
   }
-
-  return NextResponse.json({ received: true });
-}
+  return NextResponse.json({
+    received: true,
+  });
+};
