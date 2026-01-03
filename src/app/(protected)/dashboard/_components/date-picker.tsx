@@ -21,6 +21,12 @@ import {
 export function DatePicker() {
   const [open, setOpen] = React.useState(false);
 
+  // function normalizeDate(date: Date) {
+  //   const d = new Date(date);
+  //   d.setHours(12, 0, 0, 0);
+  //   return d;
+  // }
+
   const [from, setFrom] = useQueryState(
     "from",
     parseAsIsoDate.withDefault(new Date()),
@@ -31,10 +37,24 @@ export function DatePicker() {
     parseAsIsoDate.withDefault(addMonths(new Date(), 1)),
   );
 
+  function normalizeDate(date?: Date) {
+    if (!date) return undefined;
+
+    const normalized = new Date(date);
+    normalized.setHours(normalized.getHours() + 12);
+
+    return normalized;
+  }
+
+  const normalizedFrom = normalizeDate(from);
+  const normalizedTo = normalizeDate(to);
+
   const dateRange = {
-    from,
-    to,
+    from: normalizedFrom,
+    to: normalizedTo,
   };
+
+  // console.log(dateRange.from);
 
   const handleDateSelect = (dateRange: DateRange | undefined) => {
     if (dateRange?.from) {
