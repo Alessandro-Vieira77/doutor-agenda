@@ -15,6 +15,6 @@ This project was developed with the goal of demonstrating technical skills in bo
 
 ---
 ## 🚀 Demo
-- 🌐 Deploy: [live](https://doutor-agenda-one-gamma.vercel.app/")
+- 🌐 Deploy: [live](https://doutor-agenda-one-gamma.vercel.app/)
 - 📸 Preview:
 <img src="https://i.imgur.com/btni80m.gif" />
