@@ -18,3 +18,40 @@ This project was developed with the goal of demonstrating technical skills in bo
 - 🌐 Deploy: [live](https://doutor-agenda-one-gamma.vercel.app/)
 - 📸 Preview:
 <img src="https://i.imgur.com/btni80m.gif" />
+
+---
+
+## ✨ Features
+- Modern interface
+- API consumption
+- State management
+- Loading and error handling
+- Basic SEO (when applied)
+- Management of billing, scheduling, patients, and doctors
+- Creation of billing, scheduling, patients, and doctors
+- Plan subscription
+- Dashboard for analysis
+  
+---
+
+## 🛠️ Technologies and Tools
+### Front-end
+- **React** (hooks, componentização)
+- **Next.js** (App Router, SSR, SSG)
+- **TypeScript**
+- **Tailwind CSS**
+- **shadcn/ui**
+- **React Query**
+- **Git & GitHub**
+- **Dayjs**
+- **Zod**
+- **React-hook-form**
+
+### Back-end
+- **Drizzle ORM**
+- **Postgre**
+- **Actions**
+- **next-safe-action**
+
+---
+
