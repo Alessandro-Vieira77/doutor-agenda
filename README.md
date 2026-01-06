@@ -22,6 +22,12 @@ This project was developed with the goal of demonstrating technical skills in bo
 ---
 
 ## ✨ Features
+- Account creation and login
+
+  <img src="https://i.imgur.com/jL0Gdgj.gif" width="400px" />   <img src="https://i.imgur.com/I252xKw.gif" width="400px" />
+
+  - Account creation with Google authentication included.
+  
 - Dashboard
 
   <img src="https://i.imgur.com/gIq1U0Z.gif" width="800px"/>
