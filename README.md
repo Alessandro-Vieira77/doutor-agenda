@@ -52,7 +52,13 @@ This project was developed with the goal of demonstrating technical skills in bo
   - Patient registration in the system with name, email, phone number, and gender.
   - Table for viewing the registered patients’ data.
   
-- Loading and error handling
+- Subscription Service
+
+  <img src="https://i.imgur.com/H7Ri0eM.gif" width="800px" />
+  
+  - Subscription service integrated with Stripe.
+  - Subscription cancellation functionality included.
+ 
 - Basic SEO (when applied)
 - Management of billing, scheduling, patients, and doctors
 - Creation of billing, scheduling, patients, and doctors
