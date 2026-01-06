@@ -39,7 +39,12 @@ This project was developed with the goal of demonstrating technical skills in bo
   - Appointment creation with selection of patient, doctor, consultation fee, date, and time, following the dates and time slots made available by the selected doctor.
   - Appointment visualization in a table, displaying the patient’s name, doctor, specialty, date, time, and an option to delete the appointment.
   
-- API consumption
+- Doctor
+
+  <img src="https://i.imgur.com/Wu4oncL.gif" width="800px"/>
+  
+  - Doctor registration in the system with name, specialty, consultation fee, availability period (start and end date), and available working hours (start and end time).
+  - Visualization of medical data on cards, with options to delete or edit when viewing the details.
 - State management
 - Loading and error handling
 - Basic SEO (when applied)
