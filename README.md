@@ -91,6 +91,82 @@ This project was developed with the goal of demonstrating technical skills in bo
 - **Postgre**
 - **Actions**
 - **next-safe-action**
+- **Stripe**
+- **Better auth**
 
 ---
+## 📁 Folder Structure
+```bash
+src/
+├─ actions/
+│  ├─ create-clinic/
+│  ├─ create-stripe-checkout/
+│  ├─ delete-appointment/
+│  ├─ delete-doctor/
+│  ├─ delete-patient/
+│  ├─ get-available-times/
+│  ├─ upsert-appointment/
+│  ├─ upsert-doctor/
+│  └─ upsert-patient/
+│
+├─ app/
+│  ├─ (protected)/
+│  │  ├─ _components/
+│  │  ├─ appointments/
+│  │  ├─ clinic-form/
+│  │  ├─ dashboard/
+│  │  ├─ doctors/
+│  │  ├─ patients/
+│  │  └─ subscription/
+│  │
+│  ├─ api/
+│  │  ├─ auth/
+│  │  └─ stripe/
+│  │
+│  ├─ authentication/
+│  │  ├─ components/
+│  │  └─ page.tsx
+│  │
+│  ├─ new-subscription/
+│  │  └─ page.tsx
+│  │
+│  └─ layout.tsx
+```
+---
+## ⚙️ Installation and Execution
+### Prerequisites
+- Node.js >= 18
+- npm - >= 11.5.2 
+```bash
+# Clone the repository
+git clone https://github.com/Alessandro-Vieira77/doutor-agenda.git
 
+# Access the project folder
+cd doutor-agenda
+
+# Install dependencies
+npm install
+
+# Run the project in development mode
+npm run dev
+
+```
+## 📈 Lessons Learned from the Project
+- During the development of this project, the following practices were employed:
+- Organization of front-end projects
+- Best practices with React and Next.js
+- Creation of reusable components
+- Asynchronous data consumption and handling
+- Writing clean and readable code
+
+## 🚧 Next Steps
+- Implement unit tests
+- Improve accessibility
+- Optimize performance
+- Add subtle animations
+
+## 👨‍💻 Developer
+
+### Alessandro Viera
+
+- [LinkedIn](www.linkedin.com/in/alessandro-vieira02)
