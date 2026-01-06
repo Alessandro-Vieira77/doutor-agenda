@@ -32,7 +32,13 @@ This project was developed with the goal of demonstrating technical skills in bo
   - Container for viewing doctors with the highest number of appointments.
   - Container containing the specialties with the highest number of appointments.
   - Table showing today's appointments.
-- Modern interface
+- Appointments
+
+  <img src="https://i.imgur.com/cls7XCK.gif" width="800px"/>
+
+  - Appointment creation with selection of patient, doctor, consultation fee, date, and time, following the dates and time slots made available by the selected doctor.
+  - Appointment visualization in a table, displaying the patient’s name, doctor, specialty, date, time, and an option to delete the appointment.
+  
 - API consumption
 - State management
 - Loading and error handling
