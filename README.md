@@ -22,6 +22,16 @@ This project was developed with the goal of demonstrating technical skills in bo
 ---
 
 ## ✨ Features
+- Dashboard
+
+  <img src="https://i.imgur.com/gIq1U0Z.gif" width="800px"/>
+  
+  - Date selection field for viewing schedules, appointments, patients, and doctors within a defined period.
+  - Informative cards for viewing billing, appointments, patients, and doctors.
+  - Chart for visualizing schedules and billing.
+  - Container for viewing doctors with the highest number of appointments.
+  - Container containing the specialties with the highest number of appointments.
+  - Table showing today's appointments.
 - Modern interface
 - API consumption
 - State management
