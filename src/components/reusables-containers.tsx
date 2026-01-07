@@ -41,7 +41,7 @@ export const ReusableContainerHeader = ({
   ButtonFilter,
 }: reusableContainerHeaderTypes) => {
   return (
-    <div className="flex w-full items-center justify-between gap-4">
+    <div className="flex w-full flex-col items-center justify-between gap-4 xl:flex-row">
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-bold">{title}</h1>
         <p className="text-muted-foreground text-sm">{description}</p>

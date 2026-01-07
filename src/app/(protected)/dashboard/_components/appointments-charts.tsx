@@ -59,7 +59,7 @@ const AppointmentsChart = ({
   } satisfies ChartConfig;
 
   return (
-    <Card>
+    <Card className="hidden sm:block">
       <CardHeader className="flex flex-row items-center gap-2">
         <DollarSign />
         <CardTitle>Agendamentos e Faturamento</CardTitle>
