@@ -170,3 +170,7 @@ npm run dev
 ### Alessandro Viera
 
 - [LinkedIn](www.linkedin.com/in/alessandro-vieira02)
+
+## License
+This project is licensed under the:  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
