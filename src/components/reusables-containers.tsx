@@ -42,11 +42,11 @@ export const ReusableContainerHeader = ({
 }: reusableContainerHeaderTypes) => {
   return (
     <div className="flex w-full flex-col items-center justify-between gap-4 xl:flex-row">
-      <div className="flex flex-col gap-1">
+      <div className="flex w-full flex-col gap-1 xl:w-auto">
         <h1 className="text-2xl font-bold">{title}</h1>
         <p className="text-muted-foreground text-sm">{description}</p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex w-full items-center gap-2 xl:w-auto">
         {ButtonOrder}
         {ButtonFilter}
         {button}
