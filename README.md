@@ -24,7 +24,7 @@ This project was developed with the goal of demonstrating technical skills in bo
 ## ✨ Features
 - Account creation and login
 
-  <img src="https://i.imgur.com/jL0Gdgj.gif" width="400px" />   <img src="https://i.imgur.com/I252xKw.gif" width="400px" />
+  <img src="https://i.imgur.com/jL0Gdgj.gif" width="300px" />   <img src="https://i.imgur.com/I252xKw.gif" width="300px" />
 
   - Account creation with Google authentication included.
   
@@ -64,13 +64,30 @@ This project was developed with the goal of demonstrating technical skills in bo
   
   - Subscription service integrated with Stripe.
   - Subscription cancellation functionality included.
- 
-- Basic SEO (when applied)
-- Management of billing, scheduling, patients, and doctors
-- Creation of billing, scheduling, patients, and doctors
-- Plan subscription
-- Dashboard for analysis
-  
+
+- Fully responsive design
+
+  - Dashboard
+    
+    <img src="https://i.imgur.com/IzzhMWw.gif" width="600px" />
+
+      
+
+  - Appointments
+    
+    <img src="https://i.imgur.com/x6ZK5Da.gif" width="600px" />
+      
+
+  - Doctors
+    
+    <img src="https://i.imgur.com/JFtupEJ.gif" width="600px" />
+
+
+  - Patients
+    
+    <img src="https://i.imgur.com/P962DTW.gif" width="600px" />
+
+      
 ---
 
 ## 🛠️ Technologies and Tools
