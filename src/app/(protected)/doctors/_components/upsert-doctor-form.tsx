@@ -97,7 +97,7 @@ export function UpsertDoctorForm({ doctor, onSuccess }: UpsertDoctorFormProps) {
   };
 
   return (
-    <DialogContent>
+    <DialogContent className="max-h-[550px] overflow-y-auto md:max-h-none">
       <DialogHeader>
         <DialogTitle>
           {doctor ? `${doctor?.name}` : "Adicionar Médico"}
